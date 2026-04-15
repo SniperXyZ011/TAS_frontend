@@ -6,7 +6,8 @@ import type {
   HealthResponse,
 } from "../types/api";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "tas.sniperxyz.space";
+const BASE_URL = (import.meta.env.VITE_API_URL ||
+  "https://tas.sniperxyz.space").replace(/\/$/, "");
 
 /**
  * Wrapper around fetch that injects the X-Admin-Key header from sessionStorage.
