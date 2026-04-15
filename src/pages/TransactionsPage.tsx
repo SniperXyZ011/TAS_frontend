@@ -61,7 +61,7 @@ export default function TransactionsPage() {
   return (
     <div id="transactions-page">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--color-text-primary)" }}>
             Transactions
@@ -78,7 +78,7 @@ export default function TransactionsPage() {
 
       {/* Filters bar */}
       <div
-        className="flex flex-wrap items-center gap-4 px-5 py-3 rounded-xl mb-6 animate-fade-in"
+        className="flex flex-wrap items-center gap-4 px-4 sm:px-5 py-3 rounded-xl mb-6 animate-fade-in"
         style={{ background: "var(--color-bg-card)", border: "1px solid var(--color-border)" }}
       >
         <div className="flex items-center gap-2">
@@ -101,7 +101,7 @@ export default function TransactionsPage() {
           ))}
         </select>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="w-full sm:w-auto sm:ml-auto flex items-center gap-2">
           <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
             Page size:
           </span>

@@ -1,25 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #0a0e14;
-  --color-bg-secondary: #111827;
-  --color-bg-card: #1a1f2e;
-  --color-bg-card-hover: #1f2537;
-  --color-bg-input: #0d1117;
-  --color-border: #1e293b;
-  --color-border-glow: #f59e0b33;
-  --color-accent: #f59e0b;
-  --color-accent-hover: #d97706;
-  --color-accent-muted: #f59e0b22;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
+  --color-bg-primary: #060d1b;
+  --color-bg-secondary: #0f1a2f;
+  --color-bg-card: #14213b;
+  --color-bg-card-hover: #1b2b4a;
+  --color-bg-input: #09142a;
+  --color-border: #223b61;
+  --color-border-glow: #fbbf2440;
+  --color-accent: #fbbf24;
+  --color-accent-hover: #f59e0b;
+  --color-accent-muted: #fbbf2426;
+  --color-text-primary: #f5f8ff;
+  --color-text-secondary: #bac8e0;
+  --color-text-muted: #8ea2c4;
   --color-success: #22c55e;
   --color-danger: #ef4444;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "Manrope", system-ui, sans-serif;
+  --font-heading: "Space Grotesk", "Manrope", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 }
 
@@ -38,9 +39,53 @@ html {
 }
 
 body {
-  background: var(--color-bg-primary);
+  background:
+    radial-gradient(circle at 15% -10%, #1d4f9135 0%, transparent 45%),
+    radial-gradient(circle at 85% -20%, #fbbf241f 0%, transparent 35%),
+    linear-gradient(180deg, #050b17 0%, #060d1b 40%, #071025 100%);
   color: var(--color-text-primary);
   min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+}
+
+.app-shell {
+  position: relative;
+}
+
+.app-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+      to right,
+      transparent 0,
+      transparent calc(100% - 1px),
+      rgba(255, 255, 255, 0.02) calc(100% - 1px)
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(100% - 1px),
+      rgba(255, 255, 255, 0.015) calc(100% - 1px)
+    );
+  background-size: 44px 44px;
+  opacity: 0.25;
+  z-index: 0;
 }
 
 /* ─── Scrollbar ───────────────────────────────────────────────────────────── */
@@ -121,12 +166,12 @@ body {
 .glass-card {
   background: linear-gradient(
     135deg,
-    rgba(26, 31, 46, 0.8) 0%,
-    rgba(17, 24, 39, 0.6) 100%
+    rgba(20, 33, 59, 0.8) 0%,
+    rgba(15, 26, 47, 0.68) 100%
   );
   backdrop-filter: blur(16px);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 14px;
   transition: all 0.25s ease;
 }
 
@@ -142,7 +187,7 @@ body {
   padding: 10px 14px;
   background: var(--color-bg-input);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--color-text-primary);
   font-size: 0.875rem;
   font-family: var(--font-sans);
@@ -170,7 +215,7 @@ body {
   font-weight: 600;
   font-size: 0.875rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-sans);
@@ -199,7 +244,7 @@ body {
   font-weight: 500;
   font-size: 0.875rem;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-sans);
@@ -228,7 +273,7 @@ body {
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-secondary);
+  background: color-mix(in srgb, var(--color-bg-secondary) 80%, #000 20%);
   white-space: nowrap;
 }
 
@@ -244,6 +289,24 @@ body {
   border-bottom: 1px solid rgba(30, 41, 59, 0.5);
   color: var(--color-text-secondary);
   white-space: nowrap;
+}
+
+@media (max-width: 1023px) {
+  .glass-card {
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 767px) {
+  .data-table thead th,
+  .data-table tbody td {
+    padding: 10px 12px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 9px 14px;
+  }
 }
 
 /* ─── Modal overlay ───────────────────────────────────────────────────────── */

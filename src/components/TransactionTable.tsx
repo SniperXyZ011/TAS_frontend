@@ -7,7 +7,9 @@ interface TransactionTableProps {
 }
 
 function formatTimestamp(unix: number): string {
+  if (!Number.isFinite(unix)) return "-";
   const d = new Date(unix * 1000);
+  if (Number.isNaN(d.getTime())) return "-";
   return d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -16,6 +18,11 @@ function formatTimestamp(unix: number): string {
     minute: "2-digit",
     second: "2-digit",
   });
+}
+
+function shortId(value: unknown, length = 8): string {
+  if (typeof value !== "string" || value.length === 0) return "-";
+  return value.length > length ? `${value.slice(0, length)}...` : value;
 }
 
 export default function TransactionTable({
@@ -58,26 +65,24 @@ export default function TransactionTable({
           </tr>
         </thead>
         <tbody>
-          {transactions.map((tx) => (
-            <tr key={tx.transaction_id}>
+          {transactions.map((tx, index) => (
+            <tr key={tx.transaction_id || `tx-${index}`}>
               <td>
                 <code className="text-xs px-2 py-0.5 rounded" style={{ background: "var(--color-bg-input)", fontFamily: "var(--font-mono)" }}>
-                  {tx.transaction_id.length > 12
-                    ? `${tx.transaction_id.slice(0, 12)}…`
-                    : tx.transaction_id}
+                  {shortId(tx.transaction_id, 12)}
                 </code>
               </td>
               <td>
                 <code className="text-xs px-2 py-0.5 rounded" style={{ background: "var(--color-bg-input)", fontFamily: "var(--font-mono)" }}>
-                  {tx.node_id.slice(0, 8)}…
+                  {shortId(tx.node_id)}
                 </code>
               </td>
-              <td style={{ color: "var(--color-text-primary)" }}>{tx.user_id}</td>
-              <td style={{ color: "var(--color-text-primary)" }}>{tx.weapon_id}</td>
+              <td style={{ color: "var(--color-text-primary)" }}>{tx.user_id || "-"}</td>
+              <td style={{ color: "var(--color-text-primary)" }}>{tx.weapon_id || "-"}</td>
               <td>
                 <StatusBadge status={tx.action} />
               </td>
-              <td className="text-center">{tx.quantity}</td>
+              <td className="text-center">{Number.isFinite(tx.quantity) ? tx.quantity : "-"}</td>
               <td>{formatTimestamp(tx.timestamp)}</td>
               <td className="max-w-[200px] truncate">{tx.notes || "—"}</td>
             </tr>

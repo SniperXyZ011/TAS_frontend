@@ -9,6 +9,7 @@ interface NodeTableProps {
 function formatDate(dateStr?: string | null): string {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "—";
   return d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -21,6 +22,7 @@ function formatDate(dateStr?: string | null): string {
 function timeAgo(dateStr?: string | null): string {
   if (!dateStr) return "Never";
   const diff = Date.now() - new Date(dateStr).getTime();
+  if (Number.isNaN(diff)) return "Never";
   const minutes = Math.floor(diff / 60000);
   if (minutes < 1) return "Just now";
   if (minutes < 60) return `${minutes}m ago`;
@@ -28,6 +30,11 @@ function timeAgo(dateStr?: string | null): string {
   if (hours < 24) return `${hours}h ago`;
   const days = Math.floor(hours / 24);
   return `${days}d ago`;
+}
+
+function shortId(value: unknown, length = 8): string {
+  if (typeof value !== "string" || value.length === 0) return "-";
+  return value.length > length ? `${value.slice(0, length)}...` : value;
 }
 
 export default function NodeTable({ nodes, isLoading }: NodeTableProps) {
@@ -66,17 +73,17 @@ export default function NodeTable({ nodes, isLoading }: NodeTableProps) {
           </tr>
         </thead>
         <tbody>
-          {nodes.map((node) => (
-            <tr key={node.node_id}>
+          {nodes.map((node, index) => (
+            <tr key={node.node_id || `node-${index}`}>
               <td className="font-semibold" style={{ color: "var(--color-text-primary)" }}>
-                {node.name}
+                {node.name || "Unnamed"}
               </td>
               <td>
                 <code className="text-xs px-2 py-0.5 rounded" style={{ background: "var(--color-bg-input)", fontFamily: "var(--font-mono)" }}>
-                  {node.node_id.slice(0, 8)}…
+                  {shortId(node.node_id)}
                 </code>
               </td>
-              <td>{node.location}</td>
+              <td>{node.location || "-"}</td>
               <td>
                 <StatusBadge status={node.tier} />
               </td>

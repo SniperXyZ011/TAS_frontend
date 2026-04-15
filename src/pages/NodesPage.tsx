@@ -29,7 +29,7 @@ export default function NodesPage() {
   return (
     <div id="nodes-page">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight" style={{ color: "var(--color-text-primary)" }}>
             Edge Nodes
@@ -38,7 +38,7 @@ export default function NodesPage() {
             Manage registered ESP32 kiosk nodes in the armory mesh
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <button onClick={load} className="btn-secondary" id="btn-refresh-nodes">
             <RefreshCw size={16} />
             Refresh

@@ -26,13 +26,20 @@ const ACTION_ICONS: Record<Action, typeof ArrowDownUp> = {
 };
 
 function formatTimestamp(unix: number): string {
+  if (!Number.isFinite(unix)) return "-";
   const d = new Date(unix * 1000);
+  if (Number.isNaN(d.getTime())) return "-";
   return d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function shortId(value: unknown, length = 8): string {
+  if (typeof value !== "string" || value.length === 0) return "-";
+  return value.length > length ? `${value.slice(0, length)}...` : value;
 }
 
 export default function DashboardPage() {
@@ -137,11 +144,11 @@ export default function DashboardPage() {
             </p>
           ) : (
             <div className="space-y-2">
-              {transactions.map((tx) => {
+              {transactions.map((tx, index) => {
                 const Icon = ACTION_ICONS[tx.action] || ArrowLeftRight;
                 return (
                   <div
-                    key={tx.transaction_id}
+                    key={tx.transaction_id || `tx-${index}`}
                     className="flex items-center gap-4 px-4 py-3 rounded-lg transition-colors"
                     style={{ background: "var(--color-bg-input)" }}
                   >
@@ -154,12 +161,12 @@ export default function DashboardPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-medium truncate" style={{ color: "var(--color-text-primary)" }}>
-                          {tx.weapon_id}
+                          {tx.weapon_id || "-"}
                         </p>
                         <StatusBadge status={tx.action} />
                       </div>
                       <p className="text-xs truncate" style={{ color: "var(--color-text-muted)" }}>
-                        User: {tx.user_id} · Node: {tx.node_id.slice(0, 8)}…
+                        User: {tx.user_id || "-"} · Node: {shortId(tx.node_id)}
                       </p>
                     </div>
                     <span className="text-xs shrink-0" style={{ color: "var(--color-text-muted)" }}>
@@ -183,9 +190,9 @@ export default function DashboardPage() {
             </p>
           ) : (
             <div className="space-y-3">
-              {nodes.slice(0, 8).map((node) => (
+              {nodes.slice(0, 8).map((node, index) => (
                 <div
-                  key={node.node_id}
+                  key={node.node_id || `node-${index}`}
                   className="flex items-center justify-between px-3 py-2.5 rounded-lg"
                   style={{ background: "var(--color-bg-input)" }}
                 >
@@ -196,10 +203,10 @@ export default function DashboardPage() {
                     />
                     <div className="min-w-0">
                       <p className="text-sm font-medium truncate" style={{ color: "var(--color-text-primary)" }}>
-                        {node.name}
+                        {node.name || "Unnamed"}
                       </p>
                       <p className="text-xs truncate" style={{ color: "var(--color-text-muted)" }}>
-                        {node.location}
+                        {node.location || "-"}
                       </p>
                     </div>
                   </div>

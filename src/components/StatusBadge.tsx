@@ -1,5 +1,5 @@
 interface StatusBadgeProps {
-  status: "active" | "inactive" | "online" | "offline" | string;
+  status?: "active" | "inactive" | "online" | "offline" | string | null;
   label?: string;
 }
 
@@ -22,8 +22,10 @@ const colorMap: Record<string, { bg: string; text: string; dot: string }> = {
 const fallback = { bg: "#64748b18", text: "#64748b", dot: "#64748b" };
 
 export default function StatusBadge({ status, label }: StatusBadgeProps) {
-  const colors = colorMap[status.toLowerCase()] || fallback;
-  const text = label || status;
+  const normalizedStatus =
+    typeof status === "string" && status.trim() ? status.trim() : "unknown";
+  const colors = colorMap[normalizedStatus.toLowerCase()] || fallback;
+  const text = label || normalizedStatus;
 
   return (
     <span
